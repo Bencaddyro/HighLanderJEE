@@ -2,16 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-DROP SCHEMA IF EXISTS `Highlander Monkey` ;
-CREATE SCHEMA IF NOT EXISTS `Highlander Monkey` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
-USE `Highlander Monkey` ;
 
 -- -----------------------------------------------------
--- Table `Highlander Monkey`.`Serveurs`
+-- Table `HighlanderMonkey`.`Serveurs`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Highlander Monkey`.`Serveurs` ;
+DROP TABLE IF EXISTS `HighlanderMonkey`.`Serveurs` ;
 
-CREATE  TABLE IF NOT EXISTS `Highlander Monkey`.`Serveurs` (
+CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Serveurs` (
   `nom` VARCHAR(16) NOT NULL ,
   `type` ENUM('Routeur','Pare-Feux','Serveur') NOT NULL ,
   PRIMARY KEY (`nom`) ,
@@ -20,11 +17,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Highlander Monkey`.`Pannes`
+-- Table `HighlanderMonkey`.`Pannes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Highlander Monkey`.`Pannes` ;
+DROP TABLE IF EXISTS `HighlanderMonkey`.`Pannes` ;
 
-CREATE  TABLE IF NOT EXISTS `Highlander Monkey`.`Pannes` (
+CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Pannes` (
   `Serveurs_nom` VARCHAR(16) NOT NULL ,
   `Date` DATE NOT NULL ,
   `type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
@@ -33,18 +30,18 @@ CREATE  TABLE IF NOT EXISTS `Highlander Monkey`.`Pannes` (
   INDEX `fk_Pannes_Serveurs` (`Serveurs_nom` ASC) ,
   CONSTRAINT `fk_Pannes_Serveurs`
     FOREIGN KEY (`Serveurs_nom` )
-    REFERENCES `Highlander Monkey`.`Serveurs` (`nom` )
+    REFERENCES `HighlanderMonkey`.`Serveurs` (`nom` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-USE `Highlander Monkey`;
+USE `HighlanderMonkey`;
 
 DELIMITER $$
 
-USE `Highlander Monkey`$$
-DROP TRIGGER IF EXISTS `Highlander Monkey`.`verif_insertion` $$
-USE `Highlander Monkey`$$
+USE `HighlanderMonkey`$$
+DROP TRIGGER IF EXISTS `HighlanderMonkey`.`verif_insertion` $$
+USE `HighlanderMonkey`$$
 CREATE TRIGGER verif_insertion BEFORE INSERT 
 ON Pannes FOR EACH ROW
     BEGIN
@@ -53,10 +50,10 @@ ON Pannes FOR EACH ROW
                 SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'mauvais type de panne';
             else
-                INSERT iNTO Pannes VALUES(new.Serveur_nom,new.type);
+                INSERT iNTO Pannes VALUES(new.Serveurs_nom,new.type);
             end if;
         else
-                INSERT iNTO Pannes VALUES(new.Serveur_nom,new.type);
+                INSERT iNTO Pannes VALUES(new.Serveurs_nom,new.type);
         end if;
     END
 
