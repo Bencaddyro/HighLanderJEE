@@ -2,6 +2,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
+DROP SCHEMA IF EXISTS `HighlanderMonkey` ;
+CREATE SCHEMA IF NOT EXISTS `HighlanderMonkey` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
+USE `HighlanderMonkey` ;
 
 -- -----------------------------------------------------
 -- Table `HighlanderMonkey`.`Serveurs`
@@ -49,15 +52,9 @@ ON Pannes FOR EACH ROW
             if(NEW.type != 'Reseau') then
                 SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'mauvais type de panne';
-            else
-                INSERT iNTO Pannes VALUES(new.Serveurs_nom,new.type);
             end if;
-        else
-                INSERT iNTO Pannes VALUES(new.Serveurs_nom,new.type);
         end if;
-    END
-
-$$
+    END;$$
 
 
 DELIMITER ;
