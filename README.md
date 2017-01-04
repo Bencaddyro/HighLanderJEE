@@ -1,2 +1,6 @@
-# HighLanderJEE
-Repo de dev pour le projet JEE par les HighLanders !
+# Planning des tâches :
+
+-Part Affichages (/vuepannes.jsp)
+-Part Generation (/genpannes.jsp)
+
+Allez allez
