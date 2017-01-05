@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `HighlanderMonkey`.`Pannes` ;
 
 CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Pannes` (
   `Serveurs_nom` VARCHAR(16) NOT NULL ,
-  `Date` DATE NOT NULL ,
+  `Date` DATETIME NOT NULL ,
   `type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
   `Status` TINYINT(1) NOT NULL ,
   PRIMARY KEY (`Serveurs_nom`) ,
