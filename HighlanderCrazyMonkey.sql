@@ -7,15 +7,15 @@ CREATE SCHEMA IF NOT EXISTS `HighlanderMonkey` DEFAULT CHARACTER SET latin1 COLL
 USE `HighlanderMonkey` ;
 
 -- -----------------------------------------------------
--- Table `HighlanderMonkey`.`Serveurs`
+-- Table `HighlanderMonkey`.`Machines`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `HighlanderMonkey`.`Serveurs` ;
+DROP TABLE IF EXISTS `HighlanderMonkey`.`Machines` ;
 
-CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Serveurs` (
+CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Machines` (
   `Nom` VARCHAR(16) NOT NULL ,
   `Type` ENUM('Routeur','Pare-Feux','Serveur') NOT NULL ,
-  PRIMARY KEY (`nom`) ,
-  UNIQUE INDEX `nom_UNIQUE` (`nom` ASC) )
+  PRIMARY KEY (`Nom`) ,
+  UNIQUE INDEX `nom_UNIQUE` (`Nom` ASC) )
 ENGINE = InnoDB;
 
 
@@ -25,15 +25,15 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HighlanderMonkey`.`Pannes` ;
 
 CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Pannes` (
-  `Serveurs_nom` VARCHAR(16) NOT NULL ,
   `Date` DATETIME NOT NULL ,
   `Type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
   `Status` TINYINT(1) NOT NULL ,
-  PRIMARY KEY (`Serveurs_nom`, `Date`, `type`) ,
-  INDEX `fk_Pannes_Serveurs` (`Serveurs_nom` ASC) ,
+  `Serveurs_Nom` VARCHAR(16) NOT NULL ,
+  PRIMARY KEY (`Date`, `Type`, `Serveurs_Nom`) ,
+  INDEX `fk_Pannes_Serveurs` (`Serveurs_Nom` ASC) ,
   CONSTRAINT `fk_Pannes_Serveurs`
-    FOREIGN KEY (`Serveurs_nom` )
-    REFERENCES `HighlanderMonkey`.`Serveurs` (`nom` )
+    FOREIGN KEY (`Serveurs_Nom` )
+    REFERENCES `HighlanderMonkey`.`Machines` (`Nom` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -50,7 +50,7 @@ USE `HighlanderMonkey`$$
 CREATE TRIGGER verif_insertion BEFORE INSERT 
 ON Pannes FOR EACH ROW
     BEGIN
-        if((SElECT type FROM Serveurs WHERE nom=NEW.Serveurs_nom) != 'Serveur' ) then
+        if((SElECT type FROM Serveurs WHERE Nom=NEW.Serveurs_nom) != 'Serveur' ) then
             if(NEW.type != 'Reseau') then
                 SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'mauvais type de panne';
