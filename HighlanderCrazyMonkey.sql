@@ -50,7 +50,7 @@ USE `HighlanderMonkey`$$
 CREATE TRIGGER verif_insertion BEFORE INSERT 
 ON Pannes FOR EACH ROW
     BEGIN
-        if((SElECT type FROM Serveurs WHERE Nom=NEW.Machines_nom) != 'Serveur' ) then
+        if((SElECT type FROM Machines WHERE Nom=NEW.Machines_nom) != 'Serveur' ) then
             if(NEW.type != 'Reseau') then
                 SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'mauvais type de panne';
