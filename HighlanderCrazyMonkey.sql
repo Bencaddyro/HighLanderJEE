@@ -7,15 +7,15 @@ CREATE SCHEMA IF NOT EXISTS `HighlanderMonkey` DEFAULT CHARACTER SET latin1 COLL
 USE `HighlanderMonkey` ;
 
 -- -----------------------------------------------------
--- Table `HighlanderMonkey`.`Serveurs`
+-- Table `HighlanderMonkey`.`Machines`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `HighlanderMonkey`.`Serveurs` ;
+DROP TABLE IF EXISTS `HighlanderMonkey`.`Machines` ;
 
-CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Serveurs` (
-  `nom` VARCHAR(16) NOT NULL ,
-  `type` ENUM('Routeur','Pare-Feux','Serveur') NOT NULL ,
-  PRIMARY KEY (`nom`) ,
-  UNIQUE INDEX `nom_UNIQUE` (`nom` ASC) )
+CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Machines` (
+  `Nom` VARCHAR(16) NOT NULL ,
+  `Type` ENUM('Routeur','Pare-Feux','Serveur') NOT NULL ,
+  PRIMARY KEY (`Nom`) ,
+  UNIQUE INDEX `nom_UNIQUE` (`Nom` ASC) )
 ENGINE = InnoDB;
 
 
@@ -25,15 +25,15 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HighlanderMonkey`.`Pannes` ;
 
 CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Pannes` (
-  `Serveurs_nom` VARCHAR(16) NOT NULL ,
+  `Machines_Nom` VARCHAR(16) NOT NULL ,
   `Date` DATETIME NOT NULL ,
-  `type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
+  `Type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
   `Status` TINYINT(1) NOT NULL ,
-  PRIMARY KEY (`Serveurs_nom`) ,
-  INDEX `fk_Pannes_Serveurs` (`Serveurs_nom` ASC) ,
-  CONSTRAINT `fk_Pannes_Serveurs`
-    FOREIGN KEY (`Serveurs_nom` )
-    REFERENCES `HighlanderMonkey`.`Serveurs` (`nom` )
+  PRIMARY KEY (`Machines_Nom`, `Date`, `Type`) ,
+  INDEX `fk_Pannes_Machines` (`Machines_Nom` ASC) ,
+  CONSTRAINT `fk_Pannes_Machines`
+    FOREIGN KEY (`Machines_Nom` )
+    REFERENCES `HighlanderMonkey`.`Machines` (`Nom` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -45,10 +45,12 @@ DELIMITER $$
 USE `HighlanderMonkey`$$
 DROP TRIGGER IF EXISTS `HighlanderMonkey`.`verif_insertion` $$
 USE `HighlanderMonkey`$$
+
+
 CREATE TRIGGER verif_insertion BEFORE INSERT 
 ON Pannes FOR EACH ROW
     BEGIN
-        if((SElECT type FROM Serveurs WHERE nom=NEW.Serveurs_nom) != 'Serveur' ) then
+        if((SElECT type FROM Machines WHERE Nom=NEW.Machines_nom) != 'Serveur' ) then
             if(NEW.type != 'Reseau') then
                 SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'mauvais type de panne';

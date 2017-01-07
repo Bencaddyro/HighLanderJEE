@@ -4,6 +4,3 @@ function actualisationFunction(mydiv) {
 	division.style.backgroundColor = "#4CAF50";
 }
 
-/*TODO*/
-validation1panne(this){}
-validationpannes(this){}
