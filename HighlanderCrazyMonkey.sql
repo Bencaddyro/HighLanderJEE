@@ -12,8 +12,8 @@ USE `HighlanderMonkey` ;
 DROP TABLE IF EXISTS `HighlanderMonkey`.`Serveurs` ;
 
 CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Serveurs` (
-  `nom` VARCHAR(16) NOT NULL ,
-  `type` ENUM('Routeur','Pare-Feux','Serveur') NOT NULL ,
+  `Nom` VARCHAR(16) NOT NULL ,
+  `Type` ENUM('Routeur','Pare-Feux','Serveur') NOT NULL ,
   PRIMARY KEY (`nom`) ,
   UNIQUE INDEX `nom_UNIQUE` (`nom` ASC) )
 ENGINE = InnoDB;
@@ -26,8 +26,8 @@ DROP TABLE IF EXISTS `HighlanderMonkey`.`Pannes` ;
 
 CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Pannes` (
   `Serveurs_nom` VARCHAR(16) NOT NULL ,
-  `Date` DATE NOT NULL ,
-  `type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
+  `Date` DATETIME NOT NULL ,
+  `Type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
   `Status` TINYINT(1) NOT NULL ,
   PRIMARY KEY (`Serveurs_nom`, `Date`, `type`) ,
   INDEX `fk_Pannes_Serveurs` (`Serveurs_nom` ASC) ,
