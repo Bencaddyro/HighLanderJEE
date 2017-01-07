@@ -1,20 +1,5 @@
-# Planning des tâches :
 
 # -Part Affichages (/vuepannes.jsp)
-
-- Affichage dans tableau requete type panne entre now et 5 dernières minute
--
-  affichage pour
-  la dernière minutes
-  la dernière heure
-  la dernière jour
-  a dernière mois
-  
-- bouton refresh
--
-  commencer a reflechir pour rafraichissement auto
- 
-- generation bouton resolution de la panne -> envoie nouvelle requetes
 
 # -Part Generation (/genpannes.jsp)
 
