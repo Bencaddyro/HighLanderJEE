@@ -25,14 +25,14 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HighlanderMonkey`.`Pannes` ;
 
 CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Pannes` (
+  `Machines_Nom` VARCHAR(16) NOT NULL ,
   `Date` DATETIME NOT NULL ,
   `Type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
   `Status` TINYINT(1) NOT NULL ,
-  `Serveurs_Nom` VARCHAR(16) NOT NULL ,
-  PRIMARY KEY (`Date`, `Type`, `Serveurs_Nom`) ,
-  INDEX `fk_Pannes_Serveurs` (`Serveurs_Nom` ASC) ,
+  PRIMARY KEY (`Machines_Nom`, `Date`, `Type`) ,
+  INDEX `fk_Pannes_Serveurs` (`Machines_Nom` ASC) ,
   CONSTRAINT `fk_Pannes_Serveurs`
-    FOREIGN KEY (`Serveurs_Nom` )
+    FOREIGN KEY (`Machines_Nom` )
     REFERENCES `HighlanderMonkey`.`Machines` (`Nom` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
