@@ -26,10 +26,10 @@ DROP TABLE IF EXISTS `HighlanderMonkey`.`Pannes` ;
 
 CREATE  TABLE IF NOT EXISTS `HighlanderMonkey`.`Pannes` (
   `Serveurs_nom` VARCHAR(16) NOT NULL ,
-  `Date` DATETIME NOT NULL ,
+  `Date` DATE NOT NULL ,
   `type` ENUM('Reseau','Disque','Memoire') NOT NULL ,
   `Status` TINYINT(1) NOT NULL ,
-  PRIMARY KEY (`Serveurs_nom`) ,
+  PRIMARY KEY (`Serveurs_nom`, `Date`, `type`) ,
   INDEX `fk_Pannes_Serveurs` (`Serveurs_nom` ASC) ,
   CONSTRAINT `fk_Pannes_Serveurs`
     FOREIGN KEY (`Serveurs_nom` )
@@ -45,6 +45,8 @@ DELIMITER $$
 USE `HighlanderMonkey`$$
 DROP TRIGGER IF EXISTS `HighlanderMonkey`.`verif_insertion` $$
 USE `HighlanderMonkey`$$
+
+
 CREATE TRIGGER verif_insertion BEFORE INSERT 
 ON Pannes FOR EACH ROW
     BEGIN
